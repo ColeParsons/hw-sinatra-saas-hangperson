@@ -5,20 +5,21 @@ class HangpersonGame
 
   # Get a word from remote "random word" service
   
-  attr_accessor :word, :game, :win, :lose, :play, :guesses, :show, :wrong_guesses
+  attr_accessor :word, :letter, :game, :win, :lose, :play, :guesses, :show, :wrong_guesses, :guess
   
    def guess(letter)
        
        
     if letter == nil or letter == "" or !letter.match(/[A-Za-z]/)
         
-           throw "Error"
+       @message = "Invalid guess."
            
     end
     
     
 
     if @guesses.downcase.include? letter.downcase or @wrong_guesses.downcase.include? letter.downcase
+        
            return false
            
     end
@@ -31,6 +32,8 @@ class HangpersonGame
             @wrong_guesses += letter
             
     end
+    
+    return :show
     
    end
         
@@ -56,11 +59,12 @@ class HangpersonGame
       
    end
    
-  return :play
+  return :show
   
   end
   
-  def word_with_guesses(word=@word,guesses=@guesses)
+  
+  def word_with_guesses(word=@word,guess=@guesses)
       
   word.gsub(/[^#{guesses}]/,'-')
   
@@ -82,8 +86,11 @@ class HangpersonGame
     @win = win
     @lose = lose
     @show = show
-    @guesses = ""
+    @guess = ""
     @wrong_guesses = ""
+    @letter = letter
+   
+    
   end
   
   

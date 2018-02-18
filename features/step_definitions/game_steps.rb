@@ -9,20 +9,21 @@ module WithinHelpers
 end
 World(WithinHelpers)
 
-When /^I start a new game with word "(.*)"$/ do |word|
+When (/^I start a new game with word "(.*)"$/) do |word|
   stub_request(:post, "http://watchout4snakes.com/wo4snakes/Random/RandomWord").
     to_return(:status => 200, :headers => {}, :body => word)
-  visit '/new'
+  
   click_button "New Game"
+  visit '/new'
 end
 
-When /^I guess "(.*)"(?: again)?$/ do |letter|
+When (/^I guess "(.*)"(?: again)?$/) do |letter|
   letter.downcase!
   fill_in("guess", :with => letter)
   click_button("Guess!")
 end
 
-When /^I make the following guesses:(.*)$/ do |guesses|
+When (/^I make the following guesses:(.*)$/) do |guesses|
   guesses = guesses.gsub(' ', '').split(',')
   guesses.each do |letter|
     fill_in("guess", :with => letter)
@@ -30,11 +31,11 @@ When /^I make the following guesses:(.*)$/ do |guesses|
   end
 end
 
-Then /^the word should read "(.*)"$/ do |word|
+Then (/^the word should read "(.*)"$/) do |word|
   page.should have_content(word)
 end
 
-Then /^the wrong guesses should include:(.*)$/ do |guesses|
+Then (/^the wrong guesses should include:(.*)$/) do |guesses|
   guesses = guesses.gsub(' ', '').split(',')
   guesses.each do |guess|
     with_scope("span.guesses") do
@@ -43,7 +44,7 @@ Then /^the wrong guesses should include:(.*)$/ do |guesses|
   end
 end
 
-When /^I guess "(.*)" (.*) times in a row$/ do |letter, num|
+When (/^I guess "(.*)" (.*) times in a row$/) do |letter, num|
   letter.downcase!
   num.to_i.times do
     fill_in("guess", :with => letter)
@@ -51,15 +52,15 @@ When /^I guess "(.*)" (.*) times in a row$/ do |letter, num|
   end
 end
 
-When /^I try to go to the URL "(.*)"$/ do |url|
+When (/^I try to go to the URL "(.*)"$/) do |url|
   visit url
 end
 
-Given /^(?:|I )am on (.+)$/ do |page_name|
+Given (/^(?:|I )am on (.+)$/) do |page_name|
   visit path_to(page_name)
 end
 
-Then /^(?:|I )should be on (.+)$/ do |page_name|
+Then (/^(?:|I )should be on (.+)$/) do |page_name|
   current_path = URI.parse(current_url).path
   if current_path.respond_to? :should
     current_path.should == path_to(page_name)
@@ -68,7 +69,7 @@ Then /^(?:|I )should be on (.+)$/ do |page_name|
   end
 end
 
-Then /^(?:|I )should see "([^\"]*)"(?: within "([^\"]*)")?$/ do |text, selector|
+Then (/^(?:|I )should see "([\"]*)"(?: within "([\"]*)")?$/) do |text, selector|
   with_scope(selector) do
     if page.respond_to? :should
       page.should have_content(text)
@@ -78,7 +79,7 @@ Then /^(?:|I )should see "([^\"]*)"(?: within "([^\"]*)")?$/ do |text, selector|
   end
 end
 
-When /^(?:|I )press "([^\"]*)"(?: within "([^\"]*)")?$/ do |button, selector|
+When (/^(?:|I )press "([\"]*)"(?: within "([\"]*)")?$/) do |button, selector|
   with_scope(selector) do
     click_button(button)
   end
