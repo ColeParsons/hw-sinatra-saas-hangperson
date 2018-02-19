@@ -10,30 +10,34 @@ class HangpersonGame
    def guess(letter)
        
        
-    if letter == nil or letter == "" or !letter.match(/[A-Za-z]/)
+    if letter.nil? or letter == "" or !letter.match(/[A-Za-z]/)
         
-       @message = "Invalid guess."
+       raise ArgumentError.new("Invalid guess.")
            
     end
     
     
 
-    if @guesses.downcase.include? letter.downcase or @wrong_guesses.downcase.include? letter.downcase
+    if (@guesses || "").include?(letter) or (@wrong_guesses || "").include?(letter)
         
            return false
            
     end
            
-    if @word.downcase.include? letter.downcase
+    if (@word || "").include?(letter)
             
             @guesses += letter
+            
+            return true
             
     else
             @wrong_guesses += letter
             
+            return true
+            
     end
     
-    return :show
+    
     
    end
         
@@ -45,7 +49,7 @@ class HangpersonGame
   
   def check_win_or_lose
       
-   if @wrong_guesses.length == 7
+   if @wrong_guesses.length >= 7
        
       return :lose
       
@@ -59,14 +63,14 @@ class HangpersonGame
       
    end
    
-  return :show
+   :play
   
   end
   
   
-  def word_with_guesses(word=@word,guess=@guesses)
+  def word_with_guesses()
       
-  word.gsub(/[^#{guesses}]/,'-')
+  @word.gsub(/[^ #{@guesses}]/,'-')
   
   
     

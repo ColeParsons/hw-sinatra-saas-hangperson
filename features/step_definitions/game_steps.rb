@@ -9,12 +9,12 @@ module WithinHelpers
 end
 World(WithinHelpers)
 
-When (/^I start a new game with word "(.*)"$/) do |word|
+When (/^ I start a new game with word "(.*)"$/) do |word|
   stub_request(:post, "http://watchout4snakes.com/wo4snakes/Random/RandomWord").
     to_return(:status => 200, :headers => {}, :body => word)
-  
-  click_button "New Game"
   visit '/new'
+  click_button "New Game"
+   
 end
 
 When (/^I guess "(.*)"(?: again)?$/) do |letter|
@@ -23,7 +23,7 @@ When (/^I guess "(.*)"(?: again)?$/) do |letter|
   click_button("Guess!")
 end
 
-When (/^I make the following guesses:(.*)$/) do |guesses|
+When (/^ I make the following guesses: (.*)$/) do |guesses|
   guesses = guesses.gsub(' ', '').split(',')
   guesses.each do |letter|
     fill_in("guess", :with => letter)
@@ -69,7 +69,7 @@ Then (/^(?:|I )should be on (.+)$/) do |page_name|
   end
 end
 
-Then (/^(?:|I )should see "([\"]*)"(?: within "([\"]*)")?$/) do |text, selector|
+Then (/^ (?:|I )should see "([\"]*)"(?: within "([\"]*)")?$/) do |text, selector|
   with_scope(selector) do
     if page.respond_to? :should
       page.should have_content(text)
